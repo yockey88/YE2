@@ -1,0 +1,22 @@
+{
+    "window": {
+        "title": "LAME ASS FUCKING JSON CONFIG FILES" ,
+        "color": {
+            "r": 0.3 ,
+            "g": 0.3 ,
+            "b": 0.3 , 
+            "a": 1.0
+        } ,
+        "size": {
+            "width": 1440 ,
+            "height": 1080
+        } ,
+        "position": {
+            "x": 0 ,
+            "y": 0
+        } ,
+        "resizable": true ,
+        "render_to_screen": true  ,
+        "vsync": true
+    }
+}

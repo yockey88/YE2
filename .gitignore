@@ -1,0 +1,10 @@
+external/assimp
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.txt
+bin/*
+bin_obj/*
+res/*
+*.txt
