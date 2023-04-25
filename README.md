@@ -9,7 +9,7 @@
 I do all my development on windows right now (unfortunately) so thats what the build system currently works on. I dont have
 any other systems to test on, but I am currently porting the code to be cross platform for Windows, Linux, and Mac. If you try to build this on those platforms before I am finished, simply submit a pull request and I'll look over it.
 
-Right now th engine is barely a framework for rendering built almost entirely from 3rd party libraries. The future of the project lies in
+Right now the engine is barely a framework for rendering built almost entirely from 3rd party libraries. The future of the project lies in
 removing these dependencies from the engine and implementing my own solutions (excepting OpenGL, SDL2, and STB which are beyond my capabilities to implement or I am simply not interested in doing so at the moment). Current dependencies I will eliminate in the future include:
 
 - Box2D Physics
