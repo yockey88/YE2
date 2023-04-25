@@ -3,7 +3,7 @@ import os , subprocess , sys
 
 args = globals.ProcessArguments(sys.argv)
 print(args)
-CONFIG = globals.GetArgValue(args , "config" , "debug")
+CONFIG = globals.GetArgValue(args , "c" , "debug")
 
 print("Building Machine Y in [{}] Configuration".format(CONFIG))
 print("\n")

@@ -1,5 +1,5 @@
 LIB_NAME = "YE2"
-EXE_NAME = "TestBed"
+MAIN_EXE_NAME = "TestBed"
 
 TOOLS_DIR = "tools"
 

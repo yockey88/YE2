@@ -1,5 +1,5 @@
 workspace "YE2"
-    startproject "TesBed"
+    startproject "TestBed"
     architecture "x64"
 
     configurations {
@@ -22,13 +22,11 @@ workspace "YE2"
     externals["stb"] = "external/stb"
     externals["json"] = "external/json"
     externals["box2d"] = "external/box2d"
-    -- externals["jolt"] = "external/JoltPhysics-3.0.1"
     externals["reactphysics3d"] = "external/ReactPhysics3d"
 
     -- Glad before all
     include "external/glad"
     include "external/box2d"
-    -- include "external/JoltPhysics-3.0.1"
     include "external/ReactPhysics3d"
 
     --------------------
@@ -60,9 +58,7 @@ workspace "YE2"
             "%{externals.box2d}/src/**.cpp" ,
             "%{externals.box2d}/include/**.h" ,
             "%{externals.reactphysics3d}/include/reactphysics3d**.h" ,
-            "%{externals.reactphysics3d}/src/**.cpp" -- ,
-            -- "%{externals.jolt}/**.cpp" ,
-            -- "%{externals.jolt}/**.h"
+            "%{externals.reactphysics3d}/src/**.cpp"
         }
 
         externalincludedirs {
@@ -77,8 +73,7 @@ workspace "YE2"
             "%{externals.stb}" ,
             "%{externals.json}/include" ,
             "%{externals.box2d}/include" ,
-            "%{externals.reactphysics3d}/include" -- ,
-            -- "%{externals.jolt}"
+            "%{externals.reactphysics3d}/include"
         }
 
         -- flags { "FatalWarnings" }
@@ -102,8 +97,7 @@ workspace "YE2"
                 "SDL2" ,
                 "glad" ,
                 "box2d" ,
-                "reactphysics3d" -- ,
-                -- "jolt"
+                "reactphysics3d"
             }
 
         filter "configurations:Debug"
@@ -121,9 +115,9 @@ workspace "YE2"
             symbols "off"
             optimize "on"
 
-    ---------------------------
-    -- Machine Y Development --
-    ---------------------------
+    -------------
+    -- TestBed --
+    -------------
     project "TestBed"
         location "TestBed"
         kind "ConsoleApp"
@@ -154,15 +148,12 @@ workspace "YE2"
             "%{externals.stb}" ,
             "%{externals.json}/include" ,
             "%{externals.box2d}/include" ,
-            "%{externals.reactphysics3d}/include" --,
-            -- "%{externals.jolt}"
+            "%{externals.reactphysics3d}/include"
         }
 
         resincludedirs {
             "res/**"
         }
-
-        -- flags { "FatalWarnings" }
 
         filter { "system:windows" , "configurations:*" }
             systemversion "latest"
@@ -180,8 +171,81 @@ workspace "YE2"
                 "SDL2" ,
                 "glad" ,
                 "box2d" ,
-                "reactphysics3d" --,
-                -- "jolt"
+                "reactphysics3d"
+            }
+
+        filter "configurations:Debug"
+            defines {
+                "YE_DEBUG"
+            }
+            runtime "Debug"
+            symbols "on"
+
+        filter "configurations:Release"
+            defines {
+                "YE_RELEASE"
+            }
+            runtime "Release"
+            symbols "off"
+            optimize "on"
+        
+    ------------------
+    -- Physics Demo --
+    ------------------
+    project "PhysicsDemo_1"
+        location "demos/PhysicsDemo_1"
+        kind "ConsoleApp"
+        language "C++"
+        cppdialect "C++20"
+        staticruntime "on"
+        links "YE2"
+
+        targetdir(tdir)
+        objdir(odir)
+
+        files {
+            "demos/%{prj.name}/**.cpp" ,
+            "demos/%{prj.name}/**.hpp" 
+        }
+
+        externalincludedirs {
+            "demos/%{prj.name}" ,
+            "demos/%{prj.name}/include" ,
+            "YE2/include" ,
+            "%{externals.sdl2}/include" ,
+            "%{externals.glad}/include" ,
+            "%{externals.spdlog}/include" ,
+            "%{externals.entt}" ,
+            "%{externals.imgui}" ,
+            "%{externals.imguizmo}" ,
+            "%{externals.glm}" ,
+            "%{externals.stb}" ,
+            "%{externals.json}/include" ,
+            "%{externals.box2d}/include" ,
+            "%{externals.reactphysics3d}/include"
+        }
+
+        resincludedirs {
+            "res/**"
+        }
+
+        filter { "system:windows" , "configurations:*" }
+            systemversion "latest"
+            defines {
+                "YE_PLATFORM_WINDOWS"
+            }
+
+            libdirs {
+                "%{externals.sdl2}/lib/x64" , 
+                "%{externals.box2d}/bin/Debug/box2d"
+            }
+
+            links {
+                "YE2" ,
+                "SDL2" ,
+                "glad" ,
+                "box2d" ,
+                "reactphysics3d"
             }
 
         filter "configurations:Debug"

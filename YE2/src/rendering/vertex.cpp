@@ -52,7 +52,7 @@ namespace rendering {
             return;
         }
 
-        glDrawElements(draw_type , (uint32_t)m_Elements.size() , GL_UNSIGNED_INT , 0);
+        glDrawElements(draw_type , (uint32_t)m_Elements.size() , GL_UNSIGNED_INT , (void*)0);
     }
 
     bool VertexArray::Upload() {

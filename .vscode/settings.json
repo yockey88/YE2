@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.tmLanguage": "plaintext",
+        "memory": "cpp",
+        "vector": "cpp",
+        "sstream": "cpp"
+    }
+}
