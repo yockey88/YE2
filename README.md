@@ -7,7 +7,7 @@
 ---
 
 I do all my development on windows right now (unfortunately) so thats what the build system is best optimized for. I dont have
-any other systems to test on, so if you happen to try and build this on Mac or Linux and it doesn't work, submit a pull request with the issue and I'll see what I can do.
+any other systems to test on, but I am currently porting the code to be cross platform for Windows, Linux, and Mac. 
 
 Right now th engine is barely a framework for rendering that is almost entirely built from 3rd party libraries. The future of the project lies in
 removing these dependencies from the engine and implement my own solutions, excepting OpenGL, SDL2, stb image which are beyond my capabilities to implement. Current dependencies I will eliminate in the future include:
