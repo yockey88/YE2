@@ -4,7 +4,9 @@ external/assimp
 *.vcxproj.filters
 *.vcxproj.user
 *.txt
-bin/*
-bin_obj/*
+bin/Debug/*
+bin/Release/*
+bin_obj/Debug/*
+bin_obj/Release/*
 res/*
 *.txt

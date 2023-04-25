@@ -2,6 +2,67 @@
 
 3D Engine OpenGL/SDL2
 
-- Simply the refactor of YEngineV2
-- Documentation in progress
-- To build in the mean-time, for Visual Studio 2022 only, run the premake file to generate a vs .sln file then build and run from there
+## By Chris Y
+
+---
+
+I do all my development on windows right now (unfortunately) so thats what the build system is best optimized for. I dont have
+any other systems to test on, so if you happen to try and build this on Mac or Linux and it doesn't work, submit a pull request with the issue and I'll see what I can do.
+
+Right now th engine is barely a framework for rendering that is almost entirely built from 3rd party libraries. The future of the project lies in
+removing these dependencies from the engine and implement my own solutions, excepting OpenGL, SDL2, stb image which are beyond my capabilities to implement. Current dependencies I will eliminate in the future include:
+
+- box2d 2D physics
+- React Physics 3D
+- Entt (undecided, I really love this library)
+- glm
+- spdlog
+- json (replacing any json/xml/... files with custom scripting language)
+
+Premanent dependencies (as of this moment i am writing this):
+
+- OpenGL (maybe exchange for Vulkan when I work up the courage to face Vulkan)
+- SDL2
+- STB (might implement custom texture loading in the future)
+- Imgui and Imguizmo (I don't think I could implement UI better than ImGui its truly incredible)
+
+---
+
+### To Build Engine with Demos
+
+> clone the repo and cd into it
+
+    git clone https://github.com/yockey88/YE2.git
+    cd YE2
+
+> Make sure you have Python installed to generate the VS solution or the Linux/Mac makefiles
+
+    python3 cli.py gensln 
+
+> Then you can use the toolchain to build and run
+
+    python3 cli.py buildsln -c=<config> -p=<demo-name> (here config = debug | release)
+    python3 cli.py run -c=<config> -p=<demo-name> (here config = Debug | Release)
+
+***Note that config defaults to debug and demo-name defaults to TestBed which has no demos other than rendering***
+
+***Note also the capitalization difference between the build configuration setting and the run configuration setting, this is due to how the toolchain works***
+
+> The Build toolchain is built to handle multiple commands at once so you can just ype in
+
+    python3 cli.py gensln buildsln -c=<config> -p=<demo-name> run -c=<config> -p=<demo-name> 
+
+### To Use and Modify Engine
+
+> clone the repo and cd into it
+
+    git clone https://github.com/yockey88/YE2.git
+    cd YE2
+
+From here you have two choices:
+
+1- Modify premake file to include your own project linking against the library. The project must be entireyl contained within a single folder, but because you have to write your own `premake5.lua` file, you can structure the interior of the folder however you wish. Just do not forget to change the `MAIN_EXE_NAME` variable stored at the top of `tools/globals.py` to your own project folder location.
+
+2- Or you can simply edit the `premake5.lua` to only build the library (delete the demos sections, leaving just the premake block for the static library)
+
+***More Documentation on Engine Usage is currently being written***
