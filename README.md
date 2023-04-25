@@ -6,20 +6,20 @@
 
 ---
 
-I do all my development on windows right now (unfortunately) so thats what the build system is best optimized for. I dont have
-any other systems to test on, but I am currently porting the code to be cross platform for Windows, Linux, and Mac. 
+I do all my development on windows right now (unfortunately) so thats what the build system currently works on. I dont have
+any other systems to test on, but I am currently porting the code to be cross platform for Windows, Linux, and Mac. If you try to build this on those platforms before I am finished, simply submit a pull request and I'll look over it.
 
-Right now th engine is barely a framework for rendering that is almost entirely built from 3rd party libraries. The future of the project lies in
-removing these dependencies from the engine and implement my own solutions, excepting OpenGL, SDL2, stb image which are beyond my capabilities to implement. Current dependencies I will eliminate in the future include:
+Right now th engine is barely a framework for rendering built almost entirely from 3rd party libraries. The future of the project lies in
+removing these dependencies from the engine and implementing my own solutions (excepting OpenGL, SDL2, and STB which are beyond my capabilities to implement or I am simply not interested in doing so at the moment). Current dependencies I will eliminate in the future include:
 
-- box2d 2D physics
+- Box2D Physics
 - React Physics 3D
 - Entt (undecided, I really love this library)
 - glm
 - spdlog
 - json (replacing any json/xml/... files with custom scripting language)
 
-Premanent dependencies (as of this moment i am writing this):
+Premanent dependencies (as of right now when I am writing this):
 
 - OpenGL (maybe exchange for Vulkan when I work up the courage to face Vulkan)
 - SDL2
@@ -61,7 +61,7 @@ Premanent dependencies (as of this moment i am writing this):
 
 From here you have two choices:
 
-1- Modify premake file to include your own project linking against the library. The project must be entireyl contained within a single folder, but because you have to write your own `premake5.lua` file, you can structure the interior of the folder however you wish. Just do not forget to change the `MAIN_EXE_NAME` variable stored at the top of `tools/globals.py` to your own project folder location.
+1- Modify premake file to include your own project linking against the library. The project must be entirely contained within a single folder, but because you have to write your own `premake5.lua` file, you can structure the interior of the folder however you wish. Just do not forget to change the `MAIN_EXE_NAME` variable stored at the top of `tools/globals.py` to your own project folder location.
 
 2- Or you can simply edit the `premake5.lua` to only build the library (delete the demos sections, leaving just the premake block for the static library)
 
