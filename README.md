@@ -35,7 +35,7 @@ Premanent dependencies (as of this moment i am writing this):
     git clone https://github.com/yockey88/YE2.git
     cd YE2
 
-> Make sure you have Python installed to generate the VS solution or the Linux/Mac makefiles
+> Make sure you have Python installed to generate the VS solution (currently porting buildchain to Linux and Mac)
 
     python3 cli.py gensln 
 
