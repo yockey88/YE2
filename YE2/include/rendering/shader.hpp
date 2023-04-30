@@ -10,12 +10,22 @@
 #include <iostream>
 #include <unordered_map>
 
+/** Shader Class
+ *  -> RAII shader class
+ * 
+ * Classes::
+ *  -> Shader
+*/
+
+
+// TODO: Move this to a seperate file
 std::string GetFile(const std::string& path , const std::string& file);
 
 namespace YE {
 namespace rendering {
 
     class Shader {
+        // RAII no copy
         Shader(const Shader&) = delete;
         Shader(Shader&&) = delete;
         Shader& operator=(const Shader&) = delete;

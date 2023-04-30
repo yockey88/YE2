@@ -8,9 +8,8 @@
 using json = nlohmann::json;
 
 namespace YE {
-
-    rendering::SDL2_Config ConfigParser::ParseConfigFile(const std::string& path) {
-        
+    
+    rendering::SDL2_Config ConfigParser::ParseJsonConfigFile(const std::string& path) {
         rendering::SDL2_Config sdl2{};
 
         std::ifstream file(path);
@@ -56,6 +55,76 @@ namespace YE {
         sdl2.valid = true;
 
         return sdl2;
+    }
+
+    rendering::SDL2_Config ConfigParser::ParseYConfigFile(const std::string& path) {
+
+        std::stringstream ss;
+        std::string file_str;
+
+        std::ifstream file(path);
+
+        {
+            if (!file.is_open()) {
+                std::cout << "ConfigParser::ParseYConfigFile: Could not open file!\n";
+                return rendering::SDL2_Config{};
+            }
+
+            ss << file.rdbuf();
+            ss << '\0';
+            file_str = ss.str();
+        }
+
+        if (file_str.size() < 2) {
+            std::cout << "ConfigParser::ParseYConfigFile: File is empty!" << std::endl;
+            return rendering::SDL2_Config{};
+        }
+
+        if (file_str[0] != '[') {
+            std::cout << "ConfigParser::ParseYConfigFile: Invalid file header!" << std::endl;
+            return rendering::SDL2_Config{};
+        }
+
+        YE::rendering::SDL2_Config config{};
+        std::vector<parsing::Token> tokens = parsing::LexTokens(file_str);
+
+        {
+            for (const auto& token : tokens) {
+                parsing::PrintToken(token);
+            }
+
+            // std::stack<char> stack{};
+            // stack.push('[');
+
+            // while (!stack.empty()) {
+            //     parsing::Token token = tokens.front();
+            //     tokens.erase(tokens.begin());
+
+            //     if (token.type == parsing::Token::Type::op) {
+            //         if (token.value[0] == '[' || token.value[0] == '{' || token.value[0] == '(' || token.value[0] == '<') {
+            //             stack.push('[');
+            //         } else if (token.value[0] == ']' || token.value[0] == '}' || token.value[0] == ')' || token.value[0] == '>') {
+            //             stack.pop();
+            //         }
+            //     }
+            // }
+        }
+
+        return config;
+    }
+
+    rendering::SDL2_Config ConfigParser::ParseConfigFile(const std::string& path) {
+        std::string extension = path.substr(path.find_last_of(".") + 1);
+
+        if (extension == "json") {
+            return ParseJsonConfigFile(path);
+        } else if (extension == "yobj") {
+            return ParseYConfigFile(path);
+        } else {
+            std::cout << "ConfigParser::ParseConfigFile: Invalid config file extension!" << std::endl;
+            return rendering::SDL2_Config{};
+        }
+        
     }
 
 }

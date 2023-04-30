@@ -1,4 +1,4 @@
-import globals 
+import globals
 import os , subprocess , sys
 
 args = globals.ProcessArguments(sys.argv)
@@ -9,6 +9,11 @@ print("Building Machine Y in [{}] Configuration".format(CONFIG))
 print("\n")
 
 ret = 0
+
+ret = subprocess.call(["cmd.exe" , "/c" , "python3" , "./cli.py" , "build_scripts"])
+
+if (ret != 0):
+    sys.exit(ret)
 
 if globals.IsWindows():
     VS_BUILD_PATH = os.environ["VS_BUILD_PATH"][8:-1]

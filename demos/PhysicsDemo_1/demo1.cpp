@@ -396,17 +396,17 @@ int main() {
             shader->SetUniformMat4("model" , box_model);
             box->Draw();
             shader->SetUniformMat4("model" , box_model1);
-            box->Draw();
+            box1->Draw();
             shader->SetUniformMat4("model" , box_model2);
-            box->Draw();
+            box2->Draw();
             shader->SetUniformMat4("model" , box_model3);
-            box->Draw();
+            box3->Draw();
             shader->SetUniformMat4("model" , box_model4);
-            box->Draw();
+            box4->Draw();
             shader->SetUniformMat4("model" , box_model5);
-            box->Draw();
+            box5->Draw();
             shader->SetUniformMat4("model" , box_model6);
-            box->Draw();
+            box6->Draw();
             shader->Unbind();
             tex->Unbind();
 

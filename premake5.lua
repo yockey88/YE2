@@ -23,6 +23,8 @@ workspace "YE2"
     externals["json"] = "external/json"
     externals["box2d"] = "external/box2d"
     externals["reactphysics3d"] = "external/ReactPhysics3d"
+    externals["asmjit"] = "external/asmjit"
+    externals["llvm"] = "C:/Program Files (X86)/LLVM"
 
     -- Glad before all
     include "external/glad"
@@ -58,7 +60,10 @@ workspace "YE2"
             "%{externals.box2d}/src/**.cpp" ,
             "%{externals.box2d}/include/**.h" ,
             "%{externals.reactphysics3d}/include/reactphysics3d**.h" ,
-            "%{externals.reactphysics3d}/src/**.cpp"
+            "%{externals.reactphysics3d}/src/**.cpp" ,
+            "%{externals.asmjit}/src/asmjit/**.h" ,
+            "%{externals.asmjit}/src/asmjit/**.cpp" ,
+            "%{externals.llvm}/include/llvm/**.h" 
         }
 
         externalincludedirs {
@@ -73,7 +78,9 @@ workspace "YE2"
             "%{externals.stb}" ,
             "%{externals.json}/include" ,
             "%{externals.box2d}/include" ,
-            "%{externals.reactphysics3d}/include"
+            "%{externals.reactphysics3d}/include" ,
+            "%{externals.asmjit}/src" ,
+            "%{externals.llvm}/include"
         }
 
         -- flags { "FatalWarnings" }
@@ -97,7 +104,7 @@ workspace "YE2"
                 "SDL2" ,
                 "glad" ,
                 "box2d" ,
-                "reactphysics3d"
+                "reactphysics3d" 
             }
 
         filter "configurations:Debug"
@@ -129,14 +136,18 @@ workspace "YE2"
         targetdir(tdir)
         objdir(odir)
 
+        os.execute("cmd.exe /c python3 ./cli.py build_scripts")
+
         files {
             "%{prj.name}/**.cpp" ,
-            "%{prj.name}/**.hpp" 
+            "%{prj.name}/**.hpp" ,
+            "%{prj.name}/assemblies/**.asm" 
         }
 
         externalincludedirs {
             "%{prj.name}" ,
             "%{prj.name}/include" ,
+            "%{prj.name}/other" ,
             "YE2/include" ,
             "%{externals.sdl2}/include" ,
             "%{externals.glad}/include" ,
@@ -148,15 +159,14 @@ workspace "YE2"
             "%{externals.stb}" ,
             "%{externals.json}/include" ,
             "%{externals.box2d}/include" ,
-            "%{externals.reactphysics3d}/include"
+            "%{externals.reactphysics3d}/include" ,
+            "%{externals.asmjit}/src" ,
+            "%{externals.llvm}/include"
         }
-
-        resincludedirs {
-            "res/**"
-        }
-
+        
         filter { "system:windows" , "configurations:*" }
             systemversion "latest"
+            
             defines {
                 "YE_PLATFORM_WINDOWS"
             }
@@ -222,7 +232,9 @@ workspace "YE2"
             "%{externals.stb}" ,
             "%{externals.json}/include" ,
             "%{externals.box2d}/include" ,
-            "%{externals.reactphysics3d}/include"
+            "%{externals.reactphysics3d}/include" ,
+            "%{externals.asmjit}/src" ,
+            "%{externals.llvm}/include"
         }
 
         resincludedirs {

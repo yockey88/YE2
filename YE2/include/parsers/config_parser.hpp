@@ -10,10 +10,9 @@
 
 #include "SDL.h"
 #include "glm/glm.hpp"
-// Eliminating in the near futre
-// Will be using YLang as scripting language 
-// This will extend to configurations
 #include "nlohmann/json.hpp"
+
+#include "lexer.hpp"
 
 namespace YE {
 
@@ -21,10 +20,12 @@ namespace YE {
         struct SDL2_Config;
     }
 
-    class ConfigParser {
+    static class ConfigParser {
+        static rendering::SDL2_Config ParseJsonConfigFile(const std::string& path);
+        static rendering::SDL2_Config ParseYConfigFile(const std::string& path);
         public:
             ConfigParser() {}
-            rendering::SDL2_Config ParseConfigFile(const std::string& path);
+            static rendering::SDL2_Config ParseConfigFile(const std::string& path);
     };
 
 }

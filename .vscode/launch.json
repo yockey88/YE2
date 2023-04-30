@@ -8,10 +8,10 @@
             "name": "(Windows) Launch",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "bin/Release/PhysicsDemo_1/PhysicsDemo_1.exe",
+            "program": "TestBed.exe",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/bin/Debug/TestBed",
             "environment": [],
             "console": "externalTerminal"
         }

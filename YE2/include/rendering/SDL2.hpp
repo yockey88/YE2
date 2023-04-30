@@ -8,7 +8,6 @@
 
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
-// #define IMGUI_IMPL_OPENGL_LOADER_GLAD
 #include "imgui_impl_opengl3.h"
 #include "ImGuizmo.h"
 
@@ -16,26 +15,41 @@
 #include <stdio.h>
 #include <memory>
 
+/** SDL2 Wrapper
+ *  -> wraps core window functionality from SDL2 as well sd OpenGL context creation
+ * 
+ * Structs::
+ *  -> SDL2_Config
+ * Classes::
+ *  -> SDL2
+ *      -> Shader (for window mesh)
+ *      -> Camera (active camera)
+ *      -> Framebuffer (for rendering to screen and textures)
+*/
+
 using sdl_gl_context = void*;
 
 namespace YE {
 namespace rendering {
 
+    // forward declarations
     class Shader;
     class Camera;
     class Framebuffer;
 
+    // SDl2 Config struct, can be hard coded or parsed from a yobj file
     struct SDL2_Config {
-        glm::vec4 cc{ 0.0f , 0.0f , 0.0f , 1.0f };
-        int x = 0; int y = 0;
-        int w = 0; int h = 0;
-        bool valid     = false , vsync            = false;
-        bool resizable = false , render_to_screen = true;
+        glm::vec4 cc{ 0.0f , 0.0f , 0.0f , 1.0f }; // color
+        int x = SDL_WINDOWPOS_CENTERED; int y = SDL_WINDOWPOS_CENTERED; // size
+        int w = 800; int h = 600; // dimensions
+        bool valid     = false , vsync            = false; // 
+        bool resizable = false , render_to_screen = true; // options
         Uint32 flags = 0;
         std::string title{ "[< blank >]" };
         std::string config_path{ "[< blank >]" };
     };
     
+    // SDL2 Wrapper
     class SDL2 {
         sdl_gl_context m_Context = nullptr;
 

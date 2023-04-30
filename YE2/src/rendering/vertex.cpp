@@ -52,7 +52,11 @@ namespace rendering {
             return;
         }
 
-        glDrawElements(draw_type , (uint32_t)m_Elements.size() , GL_UNSIGNED_INT , (void*)0);
+        if (m_Elements.size() > 0) {
+            glDrawElements(draw_type , (uint32_t)m_Elements.size() , GL_UNSIGNED_INT , (void*)0);
+        } else {
+            glDrawArrays(draw_type , 0 , (uint32_t)m_Verts.size());
+        }
     }
 
     bool VertexArray::Upload() {
@@ -61,11 +65,11 @@ namespace rendering {
             std::cout << "No vertices to upload" << std::endl;
             m_Valid = false;
             return false;
-        } else if (m_Elements.size() == 0) {
-            std::cout << "No elements to upload" << std::endl;
-            m_Valid = false;
-            return false;
-        }
+        } // else if (m_Elements.size() == 0) {
+        //     std::cout << "No elements to upload" << std::endl;
+        //     m_Valid = false;
+        //     return false;
+        // }
 
         std::vector<float> vertex_data{};
         for (auto& v : m_Verts) {
@@ -97,15 +101,17 @@ namespace rendering {
 
         glGenVertexArrays(1 , &VAO);
         glGenBuffers(1 , &VBO);
-        glGenBuffers(1 , &EBO);
+        if (m_Elements.size() > 0) glGenBuffers(1 , &EBO);
 
         glBindVertexArray(VAO);
 
         glBindBuffer(GL_ARRAY_BUFFER , VBO);
         glBufferData(GL_ARRAY_BUFFER , vertex_data.size() * sizeof(float) , vertex_data.data() , GL_STATIC_DRAW);
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER , EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER , sizeof(m_Elements) * sizeof(uint32_t) , m_Elements.data() , GL_STATIC_DRAW);
+        if (m_Elements.size() > 0) {
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER , EBO);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER , m_Elements.size() * sizeof(uint32_t) , m_Elements.data() , GL_STATIC_DRAW);
+        }
 
         uint32_t attrib_cnt = 0;
         uint32_t offset = 0;

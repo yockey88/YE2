@@ -1,0 +1,15 @@
+[SetEngineType(YE::PROJECTION)]
+[SetVersion(0 , 0 , 1)]
+[SetName("YE")]
+[SetAuthor("Y")]
+[SetDescription("Testing Engine")]
+
+Window window = <YE::SDL2 {
+    color::{ 0 , 0 , 0 , 255 };
+    position::{ 0 , 0 };
+    size::{ 800 , 600 };
+    title::{ YE };
+    flags::{ Resizable , Vsync };
+}>
+
+[SetWindow(window)]
