@@ -10,14 +10,6 @@
 #include <iostream>
 #include <unordered_map>
 
-/** Shader Class
- *  -> RAII shader class
- * 
- * Classes::
- *  -> Shader
-*/
-
-
 // TODO: Move this to a seperate file
 std::string GetFile(const std::string& path , const std::string& file);
 

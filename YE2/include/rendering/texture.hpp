@@ -6,11 +6,6 @@
 #include <string>
 #include <iostream>
 
-/** Texture Class
- *  -> RAII texture class
- * 
-*/
-
 namespace YE {
 namespace rendering {
 

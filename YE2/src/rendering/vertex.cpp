@@ -1,3 +1,5 @@
+#include "log.hpp"
+
 #include "rendering/vertex.hpp"
 
 #include <cassert>
@@ -6,7 +8,7 @@ void CheckGLError(const std::string& file , int line) {
     GLenum err = glGetError(); 
     bool assert = err != GL_NO_ERROR; 
     while (err != GL_NO_ERROR) { 
-        std::cout << "OpenGL Error: " << err << std::endl; 
+        YE_ERROR("OpenGL Error {} [{}:{}]" , err , file , line);
         std::string errstr; 
         switch (err) { 
             case GL_INVALID_OPERATION: errstr = "INVALID OPERATION"; break; 
@@ -17,7 +19,7 @@ void CheckGLError(const std::string& file , int line) {
             default: errstr = std::to_string(err); break; 
         } 
 
-        std::cout << "OpenGl Error -> { " << errstr << " } at " << file << " " << line << std::endl; 
+        YE_ERROR("OpenGl Error {} : [{}:{}]" , errstr , file , line); 
         err = glGetError(); 
     } 
     assert(assert); 
@@ -48,7 +50,7 @@ namespace rendering {
 
     void VertexArray::Draw(int draw_type) const {
         if (!m_Valid) {
-            std::cout << "Error: Invalid vertex array" << std::endl;
+            YE_ERROR("Error: Invalid vertex array");
             return;
         }
 
@@ -62,14 +64,10 @@ namespace rendering {
     bool VertexArray::Upload() {
 
         if (m_Verts.size() == 0) {
-            std::cout << "No vertices to upload" << std::endl;
+            YE_ERROR("No vertices to upload : Corrupt vertex array");
             m_Valid = false;
             return false;
-        } // else if (m_Elements.size() == 0) {
-        //     std::cout << "No elements to upload" << std::endl;
-        //     m_Valid = false;
-        //     return false;
-        // }
+        }
 
         std::vector<float> vertex_data{};
         for (auto& v : m_Verts) {

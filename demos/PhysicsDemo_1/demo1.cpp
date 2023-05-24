@@ -6,7 +6,7 @@ int main() {
     /* TODO :==> Rewrite these horrible dirty json parsers
         -> yscript and ylang config/build/object files
     */
-    YE::ConfigParser config_parser;
+    YE::parsing::ConfigParser config_parser;
     YE::rendering::SDL2_Config sdl2_config = config_parser.ParseConfigFile("config/config.json");
 
     if (!sdl2_config.valid) {
@@ -17,7 +17,7 @@ int main() {
     // SDL2 window setup and OpenGL context creation
     std::unique_ptr<YE::rendering::SDL2> sdl2 = nullptr;
     sdl2 = std::make_unique<YE::rendering::SDL2>();
-    if (sdl2->CreateWindow(&sdl2_config)) {
+    if (sdl2->CreateWin(&sdl2_config)) {
         std::cout << "SDL2 window created!" << std::endl;
     }
     

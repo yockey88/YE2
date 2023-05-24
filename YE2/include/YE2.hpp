@@ -10,6 +10,8 @@
 
 #include "reactphysics3d/reactphysics3d.h"
 
+#include "core/logger.hpp"
+
 #include "parsers/config_parser.hpp"
 
 #include "rendering/SDL2.hpp"
@@ -19,42 +21,59 @@
 #include "rendering/camera.hpp"
 #include "rendering/frame_buffer.hpp"
 
+#include "game/ye_entity.hpp"
+#include "game/ye_scene.hpp"
+#include "game/entity_components.hpp"
 
-// End of Testing Data
+#include "scripting/script_engine.hpp"
 
-// std::unique_ptr<Cube> cube2 = std::make_unique<Cube>();
-// std::unique_ptr<Cube> cube3 = std::make_unique<Cube>();
-// std::unique_ptr<Cube> cube4 = std::make_unique<Cube>();
-// std::unique_ptr<Cube> cube5 = std::make_unique<Cube>();
-// std::unique_ptr<Cube> cube6 = std::make_unique<Cube>();
-// std::unique_ptr<Cube> cube7 = std::make_unique<Cube>();
-// std::unique_ptr<Cube> cube8 = std::make_unique<Cube>();
-// std::unique_ptr<Cube> cube9 = std::make_unique<Cube>();
-// std::unique_ptr<Cube> cube10 = std::make_unique<Cube>();
+#include "temp_testing/TestMeshes.hpp"
 
-// std::unique_ptr<Cube> cubes[] = { std::move(cube)  , std::move(cube2) , std::move(cube3) , std::move(cube4) , std::move(cube5) ,
-//                  std::move(cube6) , std::move(cube7) , std::move(cube8) , std::move(cube9) , std::move(cube10) };
+#include <glm/glm.hpp>
 
-// glm::vec3 cub_pos[] = {
-//     glm::vec3(0.0f , 0.0f , 0.0f) ,
-//     glm::vec3(2.0f , 5.0f , -15.0f) ,
-//     glm::vec3(-1.5f , -2.2f , -2.5f) ,
-//     glm::vec3(-3.8f , -2.0f , -12.3f) ,
-//     glm::vec3(2.4f , -0.4f , -3.5f) ,
-//     glm::vec3(-1.7f , 3.0f , -7.5f) ,
-//     glm::vec3(1.3f , -2.0f , -2.5f) ,
-//     glm::vec3(1.5f , 2.0f , -2.5f) ,
-//     glm::vec3(1.5f , 0.2f , -1.5f) ,
-//     glm::vec3(-1.3f , 1.0f , -1.5f)
-// };
+#define ENGINEY YE::Engine::Get()
 
-// float yaw = -90.0f;
-// float pitch = 0.0f;
-// // float roll = 0.0f;
-// float fov = 45.0f;
+namespace YE {
 
-// float last_x = 400.0f;
-// float last_y = 300.0f;
+    /** EngineY Class
+     *    -> Central engine class
+     * z
+    */
+    class Engine {
+        
+        static Engine* engine_instance;
+
+        core::Logger logger;
+
+        std::unique_ptr<scripting::ScriptEngine> script_engine = nullptr;
+
+        // private constructor to prevent instantiation
+        //      Do nothing in constructor
+        //      Simply hiding it from the public
+        Engine() {}
+        // Delete copy constructors and assign operators
+        Engine(Engine&&) = delete;
+        Engine(const Engine&) = delete;
+        Engine& operator=(const Engine&) = delete;
+
+        // Internal initialization functions
+        bool InitSystems();
+
+        public:
+
+            ~Engine();
+
+            // Get the Engine instance
+            static Engine& Get();
+
+            // Public Initialization function
+            bool Init();
+            // Public Shutdown function
+            void Shutdown();
+
+    };
+
+}
 
 
 #endif // YE2_HPP

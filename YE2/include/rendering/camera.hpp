@@ -8,6 +8,12 @@
 namespace YE {
 namespace rendering {
 
+    /** Camera Class
+     *   -> handles all camera information
+     *   -> temporary implementation, will be replaced with a more robust system in the future that will allow 
+     *          have different view and projection matrices for different cameras as well as allow for users to override camera behavior
+     *          and create their own camera classes
+    */
     class Camera {
         glm::mat4 m_View_matrix;
         glm::mat4 m_Projection_matrix;
@@ -53,6 +59,8 @@ namespace rendering {
             inline glm::mat4& GetProjectionMatrix() { return m_Projection_matrix; }
             inline void GetViewMatrix(glm::mat4& viewMatrix) { viewMatrix = glm::lookAt(m_Position , m_Position + m_Front , m_Up); }
             inline void GetProjectionMatrix(glm::mat4& projectionMatrix) { projectionMatrix = glm::perspective(glm::radians(m_FOV) , m_View_width / m_View_height , m_Clipping_near , m_Clipping_far); }
+            
+            // Temporary camera movement functions
             void KeyboardCallback(SDL_Event* e);
             void MouseCallback(SDL_Event* e);
     };

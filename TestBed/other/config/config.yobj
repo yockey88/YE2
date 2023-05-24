@@ -1,15 +1,13 @@
-[SetEngineType(YE::PROJECTION)]
+[SetEngineType(YE::PERSPECTIVE)]
 [SetVersion(0 , 0 , 1)]
 [SetName("YE")]
 [SetAuthor("Y")]
 [SetDescription("Testing Engine")]
 
-Window window = <YE::SDL2 {
-    color::{ 0 , 0 , 0 , 255 };
-    position::{ 0 , 0 };
+<YE::Window {
+    color::{ 0.0f , 0.0f , 0.0f , 1.0f };
     size::{ 800 , 600 };
-    title::{ YE };
-    flags::{ Resizable , Vsync };
+    title::{ "Test Window" };
+    fullscreen::{ false };
+    resizable::{ true };
 }>
-
-[SetWindow(window)]

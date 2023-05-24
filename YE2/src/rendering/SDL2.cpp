@@ -1,3 +1,5 @@
+#include "log.hpp"
+
 #include "rendering/SDL2.hpp"
 
 #include "rendering/shader.hpp"
@@ -66,11 +68,11 @@ namespace rendering {
         SDL_Quit();
     }
 
-    bool SDL2::CreateWindow(SDL2_Config* config) {
-        if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-            printf("Unable to initialize SDL: %s", SDL_GetError());
-            return 1;
-        }
+    bool SDL2::CreateWin(SDL2_Config* config) {
+
+        int sdl_init = SDL_Init(SDL_INIT_VIDEO);
+        YE_ASSERT(sdl_init == 0 , "SDL2 failed to initialize");
+        if (sdl_init != 0) return false;
 
         config->flags = SDL_WINDOW_OPENGL;
 
@@ -82,17 +84,15 @@ namespace rendering {
         // if (config->minimized) config->flags |= SDL_WINDOW_MINIMIZED;
 
         m_Window = SDL_CreateWindow(config->title.c_str() , config->x , config->y , config->w , config->h , config->flags);
-        if (m_Window == nullptr) {
-            printf("Unable to create window: %s", SDL_GetError());
-            return false;
-        }
+        YE_ASSERT(m_Window != nullptr , "SDL2 failed to create window");
+        if (m_Window == nullptr) return false;
 
         m_Window_size = { config->w , config->h };
         m_Window_pos = { config->x , config->y };
         m_Framebuffer_size = m_Window_size;
 
         m_Rendering_to_scrn = config->render_to_screen;
-        m_Clear_color = config->cc;
+        m_Clear_color = { config->r , config->g , config->b , config->a };
 
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK , SDL_GL_CONTEXT_PROFILE_CORE);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
@@ -105,17 +105,16 @@ namespace rendering {
         SDL_SetWindowMinimumSize(m_Window , 200 , 200);
 
         m_Context = SDL_GL_CreateContext(m_Window);
-        if (m_Context == nullptr) {
-            printf("Unable to create OpenGL context: %s", SDL_GetError());
-            return false;
-        }
+        YE_ASSERT(m_Context != nullptr , "SDL2 failed to create OpenGL context");
+        if (m_Context == nullptr) return false;
+        
         if (config->vsync)
             SDL_GL_SetSwapInterval(1);
 
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO();
-        ImGui::StyleColorsDark();
+        auto io = ImGui::GetIO();
+        ImGui::StyleColorsDark((ImGuiStyle*)0);
 
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
@@ -125,10 +124,9 @@ namespace rendering {
         ImGui_ImplSDL2_InitForOpenGL(m_Window , m_Context);
         ImGui_ImplOpenGL3_Init("#version 460");
 
-        if (!gladLoadGLLoader(SDL_GL_GetProcAddress)) {
-            printf("Unable to initialize OpenGL context");
-            return false;
-        }
+        int glad_init = gladLoadGLLoader(SDL_GL_GetProcAddress);
+        YE_ASSERT(glad_init != 0 , "GLAD failed to initialize");
+        if (glad_init == 0) return false;
 
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_LEQUAL);
@@ -142,7 +140,7 @@ namespace rendering {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
         if (m_Rendering_to_scrn) {
-            m_Framebuffer = std::make_unique<Framebuffer>(m_Framebuffer_size.x , m_Framebuffer_size.y);
+            m_Framebuffer = std::make_unique<Framebuffer>(static_cast<uint32_t>(m_Framebuffer_size.x) , static_cast<uint32_t>(m_Framebuffer_size.y));
             m_Framebuffer->m_Clear_color = m_Clear_color;
             
             m_Shader = std::make_unique<Shader>("shaders/post_process.vert" , "shaders/post_process.frag");
@@ -161,10 +159,10 @@ namespace rendering {
         FlushEvents();
 
         if (m_Rendering_to_scrn) {
-            glViewport(0 , 0 , m_Framebuffer_size.x , m_Framebuffer_size.y);
+            glViewport(0 , 0 , static_cast<uint32_t>(m_Framebuffer_size.x) , static_cast<uint32_t>(m_Framebuffer_size.y));
             glClearColor(m_Framebuffer->m_Clear_color.x , m_Framebuffer->m_Clear_color.y , m_Framebuffer->m_Clear_color.z , m_Framebuffer->m_Clear_color.w);
         } else {
-            glViewport(0 , 0 , m_Window_size.x , m_Window_size.y);
+            glViewport(0 , 0 , static_cast<uint32_t>(m_Window_size.x) , static_cast<uint32_t>(m_Window_size.y));
             glClearColor(m_Clear_color.r , m_Clear_color.g , m_Clear_color.b , m_Clear_color.a);
         }
         
@@ -175,13 +173,12 @@ namespace rendering {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame(m_Window);
         ImGui::NewFrame();
-        ImGuizmo::BeginFrame();
     }
 
     void SDL2::EndRender() {
 
         m_Framebuffer->UnbindFrame();
-        glViewport(0 , 0 , m_Window_size.x , m_Window_size.y);
+        glViewport(0 , 0 , static_cast<uint32_t>(m_Window_size.x) , static_cast<uint32_t>(m_Window_size.y));
 
         glm::vec2 scale = m_Framebuffer_size / (glm::vec2)m_Window_size;
         glm::mat4 model = glm::mat4(1.0f);

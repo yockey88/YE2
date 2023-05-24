@@ -1,1 +1,93 @@
-﻿
+﻿  CollisionBody.cpp
+  RigidBody.cpp
+  Collider.cpp
+  CollisionCallback.cpp
+  ContactManifold.cpp
+  HalfEdgeStructure.cpp
+  OverlapCallback.cpp
+  PolygonVertexArray.cpp
+  PolyhedronMesh.cpp
+  RaycastInfo.cpp
+  TriangleMesh.cpp
+  TriangleVertexArray.cpp
+  DynamicAABBTree.cpp
+  CapsuleVsCapsuleAlgorithm.cpp
+  CapsuleVsConvexPolyhedronAlgorithm.cpp
+  CollisionDispatch.cpp
+  ConvexPolyhedronVsConvexPolyhedronAlgorithm.cpp
+  GJKAlgorithm.cpp
+  VoronoiSimplex.cpp
+  NarrowPhaseInfoBatch.cpp
+  Generating Code...
+  Compiling...
+  NarrowPhaseInput.cpp
+  SATAlgorithm.cpp
+  SphereVsCapsuleAlgorithm.cpp
+  SphereVsConvexPolyhedronAlgorithm.cpp
+  SphereVsSphereAlgorithm.cpp
+  AABB.cpp
+  BoxShape.cpp
+  CapsuleShape.cpp
+  CollisionShape.cpp
+  ConcaveMeshShape.cpp
+  ConcaveShape.cpp
+  ConvexMeshShape.cpp
+  ConvexPolyhedronShape.cpp
+  ConvexShape.cpp
+  HeightFieldShape.cpp
+  SphereShape.cpp
+  TriangleShape.cpp
+  BallAndSocketJointComponents.cpp
+  ColliderComponents.cpp
+  CollisionBodyComponents.cpp
+  Generating Code...
+  Compiling...
+  Components.cpp
+  FixedJointComponents.cpp
+  HingeJointComponents.cpp
+  JointComponents.cpp
+  RigidBodyComponents.cpp
+  SliderJointComponents.cpp
+  TransformComponents.cpp
+  BallAndSocketJoint.cpp
+  ContactPoint.cpp
+  FixedJoint.cpp
+  HingeJoint.cpp
+  Joint.cpp
+  SliderJoint.cpp
+  Entity.cpp
+  EntityManager.cpp
+  Island.cpp
+  Material.cpp
+  OverlappingPairs.cpp
+  PhysicsCommon.cpp
+  PhysicsWorld.cpp
+  Generating Code...
+C:\Yock\Projects\code\YE2\external\ReactPhysics3d\include\reactphysics3d\containers\Deque.h(118): warning C4715: 'reactphysics3d::Deque<unsigned int>::getItem': not all control paths return a value
+  Compiling...
+  Matrix2x2.cpp
+  Matrix3x3.cpp
+  Quaternion.cpp
+  Transform.cpp
+  Vector2.cpp
+  Vector3.cpp
+  HeapAllocator.cpp
+  MemoryManager.cpp
+  PoolAllocator.cpp
+  SingleFrameAllocator.cpp
+  BroadPhaseSystem.cpp
+  CollisionDetectionSystem.cpp
+  ConstraintSolverSystem.cpp
+  ContactSolverSystem.cpp
+  DynamicsSystem.cpp
+  SolveBallAndSocketJointSystem.cpp
+  SolveFixedJointSystem.cpp
+  SolveHingeJointSystem.cpp
+  SolveSliderJointSystem.cpp
+  DebugRenderer.cpp
+  Generating Code...
+  Compiling...
+  DefaultLogger.cpp
+  Profiler.cpp
+  Generating Code...
+  reactphysics3d.vcxproj -> C:\Yock\Projects\code\YE2\external\ReactPhysics3d\bin\Debug\reactphysics3d\reactphysics3d.lib

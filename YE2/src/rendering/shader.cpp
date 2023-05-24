@@ -1,3 +1,5 @@
+#include "log.hpp"
+
 #include "rendering/shader.hpp"
 
 #include "glm/gtc/type_ptr.hpp"
@@ -33,9 +35,9 @@ namespace rendering {
 
         m_Program = glCreateProgram();
 
-        char vert_log[2056];
-        char frag_log[2056];
-        char error_log[2056];
+        // char vert_log[2056];
+        // char frag_log[2056];
+        char error_log[512];
         int success = 0;
 
         uint32_t vert_shader = glCreateShader(GL_VERTEX_SHADER); 
@@ -45,8 +47,12 @@ namespace rendering {
         glGetShaderiv(vert_shader , GL_COMPILE_STATUS , &success);
         if (success != GL_TRUE) {
             glGetShaderInfoLog(vert_shader , sizeof(error_log) , nullptr , error_log);
-            printf("Error compiling vertex shader: %s\n" , error_log);
+            YE_ERROR("Error compiling vertex shader {} : {}" , m_VertSrc , error_log);
             m_Valid = false;
+
+            glDeleteShader(vert_shader);
+
+            return;
         } else {
             glAttachShader(m_Program , vert_shader);
         }
@@ -57,9 +63,14 @@ namespace rendering {
         glCompileShader(frag_shader);
         glGetShaderiv(frag_shader , GL_COMPILE_STATUS , &success);
         if (success != GL_TRUE) {
-            glGetShaderInfoLog(frag_shader , sizeof(frag_log) , nullptr , error_log);
-            printf("Error compiling fragment shader: %s" , error_log);
+            glGetShaderInfoLog(frag_shader , sizeof(error_log) , nullptr , error_log);
+            YE_ERROR("Error compiling fragment shader {} : {}" , m_VertSrc , error_log);
             m_Valid = false;
+
+            glDeleteShader(frag_shader);
+            glDeleteShader(vert_shader);
+
+            return;
         } else {
             glAttachShader(m_Program , frag_shader);
         }
@@ -70,13 +81,22 @@ namespace rendering {
             glGetProgramiv(m_Program , GL_LINK_STATUS , &success);
             if (success != GL_TRUE) {
                 glGetProgramInfoLog(m_Program , 2056 , nullptr , error_log);
-                printf("Error linking shader program: ");
-                std::cout << error_log << std::endl;
+                YE_ERROR("Error linking shader program {} : {}" , m_VertSrc , error_log);
                 m_Valid = false;
+
+                glDeleteShader(frag_shader);
+                glDeleteShader(vert_shader);
+                
+                return;
             }
         } else {
-            printf("Error compiling shader program: %s\n" , error_log);
+            YE_ERROR("Error compiling shader program {} : {}" , m_VertSrc , error_log);
             m_Valid = false;
+
+            glDeleteShader(frag_shader);
+            glDeleteShader(vert_shader);
+
+            return;
         }
 
         glDeleteShader(frag_shader);

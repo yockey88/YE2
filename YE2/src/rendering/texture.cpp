@@ -1,3 +1,5 @@
+#include "log.hpp"
+
 #include "rendering/texture.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -16,10 +18,8 @@ namespace rendering {
         m_Height = h;
         m_Num_channels = n;
 
-        printf("Num Channels: %d\n" , m_Num_channels);
-
         if (m_Pixels == nullptr) {
-            std::cout << "Failed to load texture: " << real_path << std::endl;
+            YE_ERROR("Failed to load texture : {}" , real_path);
             m_Valid = false;
             return;
         }
@@ -36,17 +36,17 @@ namespace rendering {
             case 3: format = GL_RGB; break;
             case 4: format = GL_RGBA; break;
             default:
-                std::cout << "Invalid number of channels: " << m_Num_channels << std::endl;
+                YE_ERROR("Invalid number of channels : {}" , m_Num_channels);
                 m_Valid = false;
             break;
         }
 
         if (m_Pixels == nullptr && format == 0) {
-            std::cout << "Failed to load texture: " << real_path << std::endl;
+            YE_ERROR("Failed to load texture : {}" , real_path);
             m_Valid = false;
             return;
         } else if (m_Pixels != nullptr && format == 0) {
-            std::cout << "Image format not supported!" << real_path << std::endl;
+            YE_ERROR("Image format not supported!" , real_path);
             m_Valid = false;
             return;
         } if (m_Pixels != nullptr && format != 0) {

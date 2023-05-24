@@ -2,7 +2,6 @@
 #define YE_TESTBED_TESTMESHES_HPP
 
 #include "stb_image.h"
-#include "asmjit/asmjit.h"
 
 #include "YE2.hpp"
 

@@ -19,7 +19,6 @@ void CheckGLError(const std::string& file , int line);
 
 namespace YE {
 namespace rendering {
-
     struct Vertex {
         glm::vec3 position{ 0.f , 0.f , 0.f };
         glm::vec3 color{ 0.f , 0.f , 0.f };
@@ -49,6 +48,10 @@ namespace rendering {
             : position(pos) , color(col) , normal(normal) , tangent(tangent) , bitangent(bitangent) , tex_coord(tex) , opacity(op) {}
     };
 
+    /** Vertex Array Class
+     *   -> Wraps OpenGL's Vertex Array Object
+     *   -> Supports both indexed and non-indexed rendering
+    */
     class VertexArray {
         VertexArray(const VertexArray&) = delete;
         VertexArray(VertexArray&&) = delete;

@@ -11,6 +11,12 @@
 namespace YE {
 namespace rendering {
 
+    /** Framebuffer class
+     *   -> wraps framebuffer functionality from OpenGL
+     *   -> draws to a texture, but there is not much functionality yet
+     *          eventually this should be able to draw to a texture to allow for post processing and
+     *          other effects as well as using the render as any other texture.
+    */
     class Framebuffer {
         const short m_Verts[16] = {  1 ,  1 , 1 , 1   ,    1 , -1 , 1 , 0 ,
                                     -1 , -1 , 0 , 0   ,   -1 ,  1 , 0 , 1 };
@@ -31,8 +37,12 @@ namespace rendering {
             Framebuffer(uint32_t width , uint32_t height);
             ~Framebuffer();
 
+            // OpenGl functionality
             void Draw();
 
+            // Bind/Unbind functionality
+            // Very important to call in correct order and
+            //      remember to unbind when done
             void BindFrame();
             void BindMesh();
             void BindTexture();

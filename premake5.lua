@@ -23,13 +23,22 @@ workspace "YE2"
     externals["json"] = "external/json"
     externals["box2d"] = "external/box2d"
     externals["reactphysics3d"] = "external/ReactPhysics3d"
-    externals["asmjit"] = "external/asmjit"
+    externals["mono"] = "external/mono"
     externals["llvm"] = "C:/Program Files (X86)/LLVM"
+
+    defines {
+        "_CRT_SECURE_NO_WARNINGS"
+    }
 
     -- Glad before all
     include "external/glad"
+
+    -- physics and such
     include "external/box2d"
     include "external/ReactPhysics3d"
+    
+    -- Scripting
+    include "./YE2/core_scripts"
 
     --------------------
     -- Engine Library --
@@ -48,29 +57,16 @@ workspace "YE2"
             "%{prj.name}/include/**.hpp" ,
             "%{prj.name}/src/**.cpp" ,
             "%{externals.imgui}/*.h" ,
-            "%{externals.imgui}/*.cpp" ,
-            "%{externals.imguizmo}/*.hpp" ,
-            "%{externals.imguizmo}/*.cpp" ,
-            "%{externals.entt}/*.hpp" ,
-            "%{externals.glad}**.c" ,
-            "%{externals.glad}**.h" ,
-            "%{externals.glm}/**.hpp" ,
-            "%{externals.stb}/*.h" ,
-            "%{externals.json}/**.hpp" ,
-            "%{externals.box2d}/src/**.cpp" ,
-            "%{externals.box2d}/include/**.h" ,
-            "%{externals.reactphysics3d}/include/reactphysics3d**.h" ,
-            "%{externals.reactphysics3d}/src/**.cpp" ,
-            "%{externals.asmjit}/src/asmjit/**.h" ,
-            "%{externals.asmjit}/src/asmjit/**.cpp" ,
-            "%{externals.llvm}/include/llvm/**.h" 
+            "%{externals.imgui}/*.cpp" 
+        }
+
+        includedirs {
+            "%{prj.name}/include" 
         }
 
         externalincludedirs {
-            "%{prj.name}/include" ,
             "%{externals.sdl2}/include" ,
             "%{externals.imgui}" ,
-            "%{externals.imguizmo}" ,
             "%{externals.entt}" ,
             "%{externals.spdlog}/include" ,
             "%{externals.glad}/include" ,
@@ -79,8 +75,7 @@ workspace "YE2"
             "%{externals.json}/include" ,
             "%{externals.box2d}/include" ,
             "%{externals.reactphysics3d}/include" ,
-            "%{externals.asmjit}/src" ,
-            "%{externals.llvm}/include"
+            "%{externals.mono}/include"
         }
 
         -- flags { "FatalWarnings" }
@@ -92,19 +87,23 @@ workspace "YE2"
         filter { "system:windows" , "configurations:*" }
             systemversion "latest"
             defines {
-                "YE_PLATFORM_WINDOWS"
+                "YE_PLATFORM_WINDOWS" ,
+                "_CRT_SECURE_NO_WARNINGS"
             }
 
             libdirs {
                 "%{externals.sdl2}/lib/x64" , 
-                "%{externals.box2d}/bin/Debug/box2d"
+                "%{externals.box2d}/bin/Debug/box2d" ,
+                "%{externals.mono}/lib" ,
+                "%{externals.mono}/lib/4.8-api"
             }
 
             links {
                 "SDL2" ,
                 "glad" ,
                 "box2d" ,
-                "reactphysics3d" 
+                "reactphysics3d" ,
+                "mono-2.0-sgen" 
             }
 
         filter "configurations:Debug"
@@ -121,6 +120,24 @@ workspace "YE2"
             runtime "Release"
             symbols "off"
             optimize "on"
+    
+    -- I want a single DLL for all core libs instead of having 
+    --      to deal with loading DLLs and managing who and what gets them 
+    --      and when they get them and when I can unload them and all that
+    --      But that will be a future thing I guess.
+    -- project "YE2_CoreScripts"
+    --     location "YE2_CoreScripts"
+    --     kind "SharedLib"
+    --     language "C#"
+    --     dotnetframework "4.7.2"
+
+    --     targetdir(tdir .. "/runtime_scripts")
+    --     objdir(odir .. "/runtime_scripts")
+
+    --     files {
+    --         "%{prj.name}/Source/**.cs" ,
+    --         "%{prj.name}/Properties/**.cs" , 
+    --     }
 
     -------------
     -- TestBed --
@@ -136,44 +153,47 @@ workspace "YE2"
         targetdir(tdir)
         objdir(odir)
 
-        os.execute("cmd.exe /c python3 ./cli.py build_scripts")
-
         files {
             "%{prj.name}/**.cpp" ,
             "%{prj.name}/**.hpp" ,
             "%{prj.name}/assemblies/**.asm" 
         }
 
-        externalincludedirs {
+        includedirs {
             "%{prj.name}" ,
             "%{prj.name}/include" ,
-            "%{prj.name}/other" ,
+            "%{prj.name}/other"
+        }
+
+        externalincludedirs {
             "YE2/include" ,
             "%{externals.sdl2}/include" ,
             "%{externals.glad}/include" ,
             "%{externals.spdlog}/include" ,
             "%{externals.entt}" ,
             "%{externals.imgui}" ,
-            "%{externals.imguizmo}" ,
             "%{externals.glm}" ,
             "%{externals.stb}" ,
             "%{externals.json}/include" ,
             "%{externals.box2d}/include" ,
             "%{externals.reactphysics3d}/include" ,
-            "%{externals.asmjit}/src" ,
-            "%{externals.llvm}/include"
+            "%{externals.llvm}/include" ,
+            "%{externals.mono}/include"
         }
         
         filter { "system:windows" , "configurations:*" }
             systemversion "latest"
             
             defines {
-                "YE_PLATFORM_WINDOWS"
+                "YE_PLATFORM_WINDOWS" ,
+                "_CRT_SECURE_NO_WARNINGS"
             }
 
             libdirs {
                 "%{externals.sdl2}/lib/x64" , 
-                "%{externals.box2d}/bin/Debug/box2d"
+                "%{externals.box2d}/bin/Debug/box2d" ,
+                "%{externals.mono}/lib" ,
+                "%{externals.mono}/lib/4.8-api"
             }
 
             links {
@@ -181,7 +201,8 @@ workspace "YE2"
                 "SDL2" ,
                 "glad" ,
                 "box2d" ,
-                "reactphysics3d"
+                "reactphysics3d" ,
+                "mono-2.0-sgen" 
             }
 
         filter "configurations:Debug"
@@ -218,23 +239,25 @@ workspace "YE2"
             "demos/%{prj.name}/**.hpp" 
         }
 
-        externalincludedirs {
+        includedirs {
             "demos/%{prj.name}" ,
-            "demos/%{prj.name}/include" ,
+            "demos/%{prj.name}/include" 
+        }
+
+        externalincludedirs {
             "YE2/include" ,
             "%{externals.sdl2}/include" ,
             "%{externals.glad}/include" ,
             "%{externals.spdlog}/include" ,
             "%{externals.entt}" ,
             "%{externals.imgui}" ,
-            "%{externals.imguizmo}" ,
             "%{externals.glm}" ,
             "%{externals.stb}" ,
             "%{externals.json}/include" ,
             "%{externals.box2d}/include" ,
             "%{externals.reactphysics3d}/include" ,
-            "%{externals.asmjit}/src" ,
-            "%{externals.llvm}/include"
+            "%{externals.llvm}/include" ,
+            "%{externals.mono}/include"
         }
 
         resincludedirs {
@@ -249,7 +272,9 @@ workspace "YE2"
 
             libdirs {
                 "%{externals.sdl2}/lib/x64" , 
-                "%{externals.box2d}/bin/Debug/box2d"
+                "%{externals.box2d}/bin/Debug/box2d" ,
+                "%{externals.mono}/lib" ,
+                "%{externals.mono}/lib/4.8-api"
             }
 
             links {
@@ -257,7 +282,7 @@ workspace "YE2"
                 "SDL2" ,
                 "glad" ,
                 "box2d" ,
-                "reactphysics3d"
+                "reactphysics3d" ,
             }
 
         filter "configurations:Debug"

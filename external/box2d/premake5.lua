@@ -18,13 +18,6 @@ project "box2d"
     filter { "system:windows" }
         systemversion "latest"
 
-    filter { "system:macosx" }
-        systemversion "latest"
-        xcodebuildsettings {
-            ["MACOSX_DEPLOYMENT_TARGET"] = "10.15",
-            ["UseModernBuildSystem"] = "NO"
-        }
-
     filter "configurations:Debug"
         runtime "Debug"
         symbols "on"

@@ -1,3 +1,5 @@
+#include "log.hpp"
+
 #include "rendering/frame_buffer.hpp"
 
 namespace YE {
@@ -38,7 +40,7 @@ namespace rendering {
 
         glGenTextures(1 , &m_Texture);
         glBindTexture(GL_TEXTURE_2D , m_Texture);
-        glTexImage2D(GL_TEXTURE_2D , 0 , GL_RGB , m_Size.x , m_Size.y , 0 , GL_RGB , GL_UNSIGNED_BYTE , NULL);
+        glTexImage2D(GL_TEXTURE_2D , 0 , GL_RGB , (GLsizei)m_Size.x , (GLsizei)m_Size.y , 0 , GL_RGB , GL_UNSIGNED_BYTE , NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glBindTexture(GL_TEXTURE_2D , 0);
@@ -46,17 +48,13 @@ namespace rendering {
 
         glGenRenderbuffers(1 , &m_RBO);
         glBindRenderbuffer(GL_RENDERBUFFER , m_RBO);
-        glRenderbufferStorage(GL_RENDERBUFFER , GL_DEPTH24_STENCIL8 , m_Size.x , m_Size.y);
+        glRenderbufferStorage(GL_RENDERBUFFER , GL_DEPTH24_STENCIL8 , (GLsizei)m_Size.x , (GLsizei)m_Size.y);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER , GL_DEPTH_STENCIL_ATTACHMENT , GL_RENDERBUFFER , m_RBO);
         glBindRenderbuffer(GL_RENDERBUFFER , 0);
 
         uint32_t status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        if (status != GL_FRAMEBUFFER_COMPLETE) {
-            std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
-            m_Valid = false;
-        } else {
-            m_Valid = true;
-        }
+        YE_ASSERT(status == GL_FRAMEBUFFER_COMPLETE , "Framebuffer is not complete!");
+        (status != GL_FRAMEBUFFER_COMPLETE) ? m_Valid = false : m_Valid = true;
 
         glBindFramebuffer(GL_FRAMEBUFFER , 0);
 
@@ -102,7 +100,7 @@ namespace rendering {
 
     void Framebuffer::BindFrame() {
         glBindFramebuffer(GL_FRAMEBUFFER , m_FBO);
-        glViewport(0 , 0 , m_Size.x , m_Size.y);
+        glViewport(0 , 0 , (GLsizei)m_Size.x , (GLsizei)m_Size.y);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     }
 
