@@ -74,7 +74,7 @@ namespace game {
 
                 } else {
 
-                    YE_ERROR("NativeScript::DestroyNativeScript() called on invalid scripting instance (nullptr)")
+                    YE_ERROR("NativeScript::DestroyNativeScript() called on invalid scripting instance (nullptr)");
 
                 }
 

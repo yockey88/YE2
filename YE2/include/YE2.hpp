@@ -10,6 +10,7 @@
 
 #include "reactphysics3d/reactphysics3d.h"
 
+#include "core/engine_config.hpp"
 #include "core/logger.hpp"
 
 #include "parsers/config_parser.hpp"
@@ -35,9 +36,10 @@
 
 namespace YE {
 
+    static std::unique_ptr<core::EngineConfiguration> engine_config = nullptr;
+
     /** EngineY Class
      *    -> Central engine class
-     * z
     */
     class Engine {
         

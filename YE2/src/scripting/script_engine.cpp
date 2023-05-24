@@ -107,9 +107,9 @@ namespace scripting {
         LoadAssembly("runtime_scripts/YE_CoreScripts.dll");
 
         YE_ASSERT(state.script_engine_valid , "Script engine failed to initialize");
-        if (!state.script_engine_valid) return false;
-
-        return true;
+        
+        return state.script_engine_valid;
+        
     }
 
     void ScriptEngine::Shutdown() {
@@ -117,8 +117,6 @@ namespace scripting {
         YE_ASSERT(state.script_engine_valid , "Script engine is invalid | Should not be calling ScriptEngine::Shutdown()");
 
         UnloadAssembly();
-
-        return true;
 
     }
 
