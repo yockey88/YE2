@@ -22,12 +22,14 @@
  * Forward declarations of structs and classes.
 */
 namespace YE {
-
-    struct YE_Config;
-
 namespace rendering {
 
     struct SDL2_Config;
+
+}
+namespace core {
+
+    struct EngineConfiguration;
 
 }
 namespace parsing {
@@ -48,15 +50,14 @@ namespace parsing {
         std::vector<Token> LexTokens(const std::string& source);
 
         // Stupid awful json files HUH-POO!!! (that was me spitting)
-        rendering::SDL2_Config ParseJsonConfigFile(const std::string& path);
-        // YObject files are much better than json files and only because I did the work to 
-        //      make them and am slightly biased
-        rendering::SDL2_Config ParseYConfigFile(const std::string& path);
+        void ParseJsonConfigFile(const std::string& path , core::EngineConfiguration *& config);
+        // YObject files are much better than json files (They dont work yet)
+        void ParseYConfigFile(const std::string& path , core::EngineConfiguration *& config);
         public:
             ConfigParser() {}
             // Main function to parse a config file
             // Detects the file type and calls the appropriate function to parse the file
-            rendering::SDL2_Config ParseConfigFile(const std::string& path);
+            void ParseConfigFile(const std::string& path , core::EngineConfiguration* config);
     };
 
 }

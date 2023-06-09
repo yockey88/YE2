@@ -12,21 +12,22 @@ namespace game {
     class Entity;
 
     class Scene {
-
+        
+        entt::registry registry;
         friend class Entity;
 
         public:
-        
-            entt::registry registry;
 
             Scene() {}
             ~Scene() {}
 
+            inline entt::registry& GetEntities() { return registry; }
+
             Entity CreateEntity(uint32_t id = 0 , const std::string& name = "[< Blank_Entity >]");
             void DestroyEntity(Entity& ent);
 
-            void Update() {}
-            void Render() {}
+            void Update();
+            void Render();
 
     };
 

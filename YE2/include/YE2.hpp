@@ -10,12 +10,18 @@
 
 #include "reactphysics3d/reactphysics3d.h"
 
+#include "log.hpp"
+
+#include "core/engine.hpp"
 #include "core/engine_config.hpp"
 #include "core/logger.hpp"
 
+#include "input/keyboard.hpp"
+#include "input/mouse.hpp"
+
 #include "parsers/config_parser.hpp"
 
-#include "rendering/SDL2.hpp"
+#include "rendering/window.hpp"
 #include "rendering/vertex.hpp"
 #include "rendering/shader.hpp"
 #include "rendering/texture.hpp"
@@ -30,52 +36,51 @@
 
 #include "temp_testing/TestMeshes.hpp"
 
-#include <glm/glm.hpp>
-
 #define ENGINEY YE::Engine::Get()
+
+#define YELOG YE::core::Logger::Get()
+using LogType = YE::core::Logger::LogType;
+using LogLevel = YE::core::Logger::LogLevel;
 
 namespace YE {
 
-    static std::unique_ptr<core::EngineConfiguration> engine_config = nullptr;
+     int Main(int argc , char* argv[]) {
 
-    /** EngineY Class
-     *    -> Central engine class
-    */
-    class Engine {
-        
-        static Engine* engine_instance;
+        YE::YApp* app = YE::CreateApp();
+        YE::Engine& engine = ENGINEY;
 
-        core::Logger logger;
+        if (!engine.Init(std::move(app))) {
 
-        std::unique_ptr<scripting::ScriptEngine> script_engine = nullptr;
+            YE_FATAL("Engine Initialization Failed");
+            delete app;
+            app = nullptr;
+            return 1;
 
-        // private constructor to prevent instantiation
-        //      Do nothing in constructor
-        //      Simply hiding it from the public
-        Engine() {}
-        // Delete copy constructors and assign operators
-        Engine(Engine&&) = delete;
-        Engine(const Engine&) = delete;
-        Engine& operator=(const Engine&) = delete;
+        }
 
-        // Internal initialization functions
-        bool InitSystems();
+        engine.Run();
+        engine.Shutdown();
 
-        public:
+        return 0;
 
-            ~Engine();
-
-            // Get the Engine instance
-            static Engine& Get();
-
-            // Public Initialization function
-            bool Init();
-            // Public Shutdown function
-            void Shutdown();
-
-    };
+    }
 
 }
 
+int main(int argc , char* argv[]) {
+
+    return YE::Main(argc , argv);
+
+}
+
+#ifdef YE_PLATFORM_WINDOWS
+
+int WINAPI WinMain(HINSTANCE hInstance , HINSTANCE hPrevInstance , LPSTR lpCmdLine , int nCmdShow) {
+
+    return main(__argc , __argv);
+
+}
+
+#endif
 
 #endif // YE2_HPP

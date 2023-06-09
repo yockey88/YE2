@@ -1,5 +1,6 @@
 #include "rendering/camera.hpp"
 
+#include "input/keyboard.hpp"
 namespace YE {
 namespace rendering {
 
@@ -27,25 +28,20 @@ namespace rendering {
         CalculateViewMatrix();
     }
 
-    void Camera::KeyboardCallback(SDL_Event* e) {
-        switch (e->type) {
-            case SDL_KEYDOWN:
-                switch (e->key.keysym.sym) {
-                    case SDLK_w: m_Position += m_Front * m_Speed; break;
-                    case SDLK_s: m_Position -= m_Front * m_Speed; break;
-                    case SDLK_a: m_Position -= m_Right * m_Speed; break;
-                    case SDLK_d: m_Position += m_Right * m_Speed; break;
-                    case SDLK_LSHIFT: m_Position += glm::vec3(0.f , 1.f , 0.f) * m_Speed; break;
-                    case SDLK_LCTRL:  m_Position -= glm::vec3(0.f , 1.f , 0.f) * m_Speed; break;
-                    default: break;
-                }
-            break;
-        }
+    void Camera::DefaultKeyboardCallback() {
+        
+        if (input::Keyboard::IsKeyPressed(input::Key::YE_KEY_W)) m_Position += m_Front * m_Speed;
+        if (input::Keyboard::IsKeyPressed(input::Key::YE_KEY_S)) m_Position -= m_Front * m_Speed;
+        if (input::Keyboard::IsKeyPressed(input::Key::YE_KEY_A)) m_Position -= m_Right * m_Speed;
+        if (input::Keyboard::IsKeyPressed(input::Key::YE_KEY_D)) m_Position += m_Right * m_Speed;
+        if (input::Keyboard::IsKeyPressed(input::Key::YE_KEY_LSHIFT)) m_Position += glm::vec3(0.f , 1.f , 0.f) * m_Speed;
+        if (input::Keyboard::IsKeyPressed(input::Key::YE_KEY_LCTRL)) m_Position -= glm::vec3(0.f , 1.f , 0.f) * m_Speed;
+
         CalculateProjectionMatrix();
         CalculateViewMatrix();
     }
     
-    void Camera::MouseCallback(SDL_Event* e){
+    void Camera::DefaultMouseCallback(SDL_Event* e){
         m_Mouse_last_x = m_Mouse_x;
         m_Mouse_last_y = m_Mouse_y;
 

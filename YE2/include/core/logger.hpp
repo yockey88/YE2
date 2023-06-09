@@ -5,6 +5,8 @@
 #include "glm/gtx/string_cast.hpp"
 
 #include <memory>
+#include <string>
+#include <mutex>
 
 #include "log.hpp"
 
@@ -44,22 +46,55 @@ namespace core {
     */
     class Logger {
         
-        // default log sink for non-fatal warnings and errors as
-        // well as general information and runtime traces
-        std::shared_ptr<spdlog::logger> m_DefaultLogger;
-        // default log sink for fatal errors and assertions
-        // this sink is also used for non-fatal errors and warnings but is not recommended
-        // as it is not as easy to read as the default logger
-        std::shared_ptr<spdlog::logger> m_DefaultErrorLogger;
-        bool m_Open;
+        public:
+            enum class LogType {
+                CONSOLE = 0 ,
+                APP     = 1 ,
+                ERR     = 2
+            };
+            
+            enum class LogLevel {
+                TRACE  = 0 , 
+                DEBUG  = 1 ,
+                INFO   = 2 , 
+                WARN   = 3 , 
+                ERR    = 4 , 
+                FATAL  = 5
+            };
+
+        private:
+
+            static Logger* log_instance;
+
+            std::mutex log_mtx;
+
+            std::shared_ptr<spdlog::logger> console_logger   = nullptr;
+            std::shared_ptr<spdlog::logger> app_logger       = nullptr;
+            std::shared_ptr<spdlog::logger> error_logger     = nullptr;
+            std::shared_ptr<spdlog::logger> file_logger      = nullptr;
+            std::shared_ptr<spdlog::logger> user_file_logger = nullptr;
+
+            Logger() {}
+            Logger(Logger&&) = delete;
+            Logger(const Logger&) = delete;
+            Logger& operator=(Logger&&) = delete;
+            Logger& operator=(const Logger&) = delete;
+
+            void ConsoleLog(Logger::LogLevel lvl , std::string msg);
+            void AppLog(Logger::LogLevel lvl , std::string msg);
+            void ErrorLog(Logger::LogLevel lvl , std::string msg);                                                          
 
         public:
-            Logger() {}
-            ~Logger() {}
 
-            void Init();
+            ~Logger();
+
+            static Logger* Get();
+
+            void Init(std::string log_path = "logs/ye.log");
             void Shutdown();
-            inline const bool IsOpen() { return m_Open; } 
+
+            /// \note this is here for greater control over logging, and eventually once logging needs grow I'll hav more sinks with explicit callbacks for different things
+            void Log(Logger::LogType type , Logger::LogLevel lvl , std::string message);
     };
 
 }

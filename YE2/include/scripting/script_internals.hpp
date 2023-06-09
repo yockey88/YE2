@@ -29,6 +29,10 @@ namespace scripting {
     void LogWarn(MonoString* mono_msg);
     void LogError(MonoString* mono_msg);
 
+    /// ID Component
+    MonoString* IDComponent_GetTag(uint64_t entity_id);
+    void IDComponent_SetTag(uint64_t entity_id , MonoString* in_tag);
+
     /** Internal Filesystem Functions
      *  -> Filesystem support in C# scripts
      * <!> UNIMPLEMENTED </!> */

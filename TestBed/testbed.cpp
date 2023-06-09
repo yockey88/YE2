@@ -1,93 +1,87 @@
 #include "YE2.hpp"
-#include "log.hpp"
 
-#include "scripts/test_native_script.hpp"
+#include "console.hpp"
+#include "scripts/native_scripts/test_native_entity.hpp"
 
-#include <climits>
-#include <chrono>
-#include <stdio.h>
+#include <iostream>
+#include <fstream>
 
-int main() {
+class TestBed : public YE::YApp {
 
-    if (!ENGINEY.Init()) {
+    DebugConsole console;
 
-        std::cerr << "Failed to initialize EngineY" << std::endl;
-        return 1;
+    ImFont* clacon_font = nullptr;
+    ImFont* vera_font   = nullptr;
 
-    }
+    std::shared_ptr<YE::game::Scene> scene;
 
-    { // Scene and Entity Testing
+    bool show_demo_window = true;
+    bool show_console     = true;
+
+    public:
         
-        // // require a scene to make an entity because an entity cannot exist without context for it to exist in
-        // YE::game::Scene scene;
-        // YE::game::Entity ent = scene.CreateEntity(1 , "TestEntity");
-
-        // scene.registry.view<YE::game::EntID>().each([=](auto ent , auto& id) {
-
-        //     YE_INFO("YE::game::Entity => <{}>::[{}]" , id.id , id.name);
-
-        // });
-
-        // auto& script = ent.AddComponent<YE::game::NativeScript>();
-
-        // script.Bind<TestScript>();
-        // script.instance->Create();
-
-        // script.instance->Update();
-
-        // script.instance->Destroy();
-        // script.Unbind();
-
-    }
-    { // Scripting Engine Testing
-
-        // Instantiate scripting engine 
-        // YE::scripting::ScriptEngine script_engine;
-        
-        // // Initialize scripting engine
-        // //      -> Creates root domain and app domain
-        // //      -> Loads core engine dlls/scripts
-        // if (!script_engine.Init()) {
+        TestBed() {
             
-        //     YE_ERROR("Failed to initialize ScriptEngine");
-        //     return 1;
+            engine_config.proj_name          = "Engine Testing";
+            engine_config.proj_author        = "Y";
+            engine_config.proj_script_path   = "../../../TestBed/scripts";
+            engine_config.proj_res_path      = "res";
+            engine_config.proj_user_log_path = "logs/testbed_console.log";
+            engine_config.render_config.render_type = YE::core::RenderConfiguration::RenderType::PERSPECTIVE;
+            engine_config.render_config.clear_color = glm::vec4(0.2f , 0.2f , 0.2f , 1.0f);
+            engine_config.render_config.position = glm::ivec2(SDL_WINDOWPOS_CENTERED , SDL_WINDOWPOS_CENTERED);
+            engine_config.render_config.size = glm::ivec2(1600 , 900);
+            engine_config.render_config.flags = SDL_WINDOW_RESIZABLE;
+            engine_config.render_config.title = "YE2";
+            engine_config.render_config.vsync = true;
 
-        // }
+            engine_config.gui_config.config_flags = ImGuiConfigFlags_NavEnableKeyboard;
+            engine_config.gui_config.window_flags = ImGuiWindowFlags_MenuBar;
+            engine_config.gui_config.font_color   = ImVec4(1.0f , 1.0f , 1.0f , 1.0f);
+            engine_config.gui_config.font_size    = 11.0f;
+            engine_config.gui_config.font_path    = "res/fonts";
 
-        // YE::scripting::ScriptEngineState* script_state = script_engine.GetState();
-        // YE_ASSERT(script_state->script_engine_valid , "Script engine failed to initialize");
+        }
 
-        // script_engine.PrintTypes();
+        virtual ~TestBed() override {}
 
-        // // Get script assembly image
-        // //     -> Used to get script class
-        // //     -> Similar storage situation to assembly
-        // MonoImage* image = mono_assembly_get_image(script_state->core_assembly);
-        // YE_ASSERT(image != nullptr , "Failed to get script assembly image");
+        virtual bool Init() override {
 
-        // // Get class from assembly
-        // //     -> Used to instantiate script object
-        // //     -> Similar storage situation to assembly and image
-        // // !!!=> I want to be able to grab YE_SCRIPT::<CLass_name> without explicitly stating
-        // //          the namespace and name, then I can have more flexibility about allowing users to user their own 
-        // //          namespaces and class names /!!! (Might not be possible, will have to rely on built in script classes getting extended)
-        // MonoClass* klass = mono_class_from_name(image , "YE" , "ScriptTesting");
-        // YE_ASSERT(klass != nullptr , "Failed to get script class");
+            scene = std::make_shared<YE::game::Scene>();
 
-        // MonoObject* object = script_engine.InstantiateObject(klass);
-        // YE_ASSERT(object != nullptr , "Failed to instantiate script object");
+            YE::game::Entity ent_handle = scene->CreateEntity(1 , "Test Ent");
 
-        // MonoMethod* method = mono_class_get_method_from_name(klass , "MainTestFunc" , 0);
-        // YE_ASSERT(method != nullptr , "Failed to get script method");
+            // clacon_font = ImGui::GetIO().Fonts->AddFontFromFileTTF("res/fonts/clacon2.ttf" , 13.0f);
+            // vera_font   = ImGui::GetIO().Fonts->AddFontFromFileTTF("res/fonts/Vera.ttf" , 13.0f);
 
-        // MonoObject* exception = nullptr;
-        // mono_runtime_invoke(method , object , nullptr , &exception);
-        // YE_ASSERT(exception == nullptr , "Failed to invoke script method");
+            YE_INFO("TestBed Initialized");
 
-    }
+            return true;
 
-    YE::Engine::Get().Shutdown();
-    
-    return 0;
+        }
 
-}
+        virtual void Update() override { 
+
+            scene->Update();
+
+            if (YE::input::Mouse::IsButtonPressed(YE::input::MouseButton::YE_MOUSE_LEFT)) {
+
+                YE_INFO("Left mouse button pressed");
+
+            }
+
+        } 
+        
+        virtual void Render() override {  }
+        
+        virtual void RenderGUI() override {
+
+            if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
+
+            if (show_console) console.Render(&show_console);
+
+        }
+        
+};
+
+YE::YApp* YE::CreateApp() { return new TestBed; }

@@ -104,6 +104,9 @@ namespace scripting {
         YE_ADD_INTERNAL_CALL(LogWarn);
         YE_ADD_INTERNAL_CALL(LogError);
 
+        YE_ADD_INTERNAL_CALL(IDComponent_GetTag);
+        YE_ADD_INTERNAL_CALL(IDComponent_SetTag);
+
         LoadAssembly("runtime_scripts/YE_CoreScripts.dll");
 
         YE_ASSERT(state.script_engine_valid , "Script engine failed to initialize");
@@ -205,8 +208,6 @@ namespace scripting {
             return;
 
         }
-
-        PrintTypes();
 
         state.script_engine_valid = true;
 

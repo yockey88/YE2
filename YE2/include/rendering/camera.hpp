@@ -61,8 +61,8 @@ namespace rendering {
             inline void GetProjectionMatrix(glm::mat4& projectionMatrix) { projectionMatrix = glm::perspective(glm::radians(m_FOV) , m_View_width / m_View_height , m_Clipping_near , m_Clipping_far); }
             
             // Temporary camera movement functions
-            void KeyboardCallback(SDL_Event* e);
-            void MouseCallback(SDL_Event* e);
+            void DefaultKeyboardCallback();
+            void DefaultMouseCallback(SDL_Event* e);
     };
 
 }

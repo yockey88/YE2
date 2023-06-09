@@ -12,6 +12,7 @@ namespace game {
         Entity ent(registry.create());
         ent.SetContext(this);
 
+        // retrieve return for completeness, goes unused for now
         auto& id_comp = ent.AddComponent<EntID>(id , name); // Add ID component to every entity upon creation
 
         return ent;
@@ -29,6 +30,18 @@ namespace game {
             YE_ERROR("Attempted to destroy invalid entity");
 
         }
+
+    }
+    
+    void Scene::Update() {
+
+
+
+    }
+
+    void Scene::Render() {
+
+        
 
     }
 

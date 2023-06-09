@@ -5,6 +5,8 @@
 namespace YE {
 namespace scripting {
 
+
+    /// Logging 
     void LogInfo(MonoString* mono_msg) {
 
         char* c_msg = mono_string_to_utf8(mono_msg);
@@ -52,6 +54,40 @@ namespace scripting {
         mono_free(c_msg);
 
         YE_ERROR(cpp_msg);
+
+    }
+
+    /// ID Component
+    MonoString* IDComponent_GetTag(uint64_t entity_id) {
+
+        // auto entity = GetEntity(entity_id);
+
+        // if (!entity) {
+
+            // YE_ERROR("IDComponent_GetTag::[ Retrieved Invalid Entity ]");
+            // return nullptr;
+
+        // }
+
+        // auto& id = entity.GetComponent<TagComponent>();
+        // id.Tag = ScriptUtils::UTF8toMonoString(id.Tag);
+        return nullptr;
+
+    }
+
+    void IDComponent_SetTag(uint64_t entity_id , MonoString* in_tag) {
+
+        // auto entity = GetEntity(entity_id);
+
+        // if (!entity) {
+
+        //     YE_ERROR("IDComponent_SetTag::[ Retrieved Invalid Entity ]");
+        //     return;
+
+        // }
+
+        // auto& id = entity.GetComponent<TagComponent>();
+        // id.Tag = ScriptUtils::MonoStringtoUTF8(id.Tag);
 
     }
 
